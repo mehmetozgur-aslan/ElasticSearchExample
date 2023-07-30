@@ -17,8 +17,10 @@ namespace ElasticSearch.API.Repositories
         public async Task<Product?> SaveAsync(Product newProduct)
         {
             newProduct.Created = DateTime.Now;
-            var response = await _client.IndexAsync(newProduct, x => x.Index(indexName));
+            var response = await _client.IndexAsync(newProduct, x => x.Index(indexName).Id(Guid.NewGuid().ToString()));
+            //var response = await _client.IndexAsync(newProduct, x => x.Index(indexName));
 
+            //fast fail
             if (!response.IsValid) return null;
 
             newProduct.Id = response.Id;
